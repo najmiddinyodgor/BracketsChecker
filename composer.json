@@ -1,0 +1,16 @@
+{
+    "name": "najmiddinyodgor/bracketschecker",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Najmiddin Yodgor",
+            "email": "najmiddinyodgor@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "BracketsChecker\\": "src/"
+        }
+    }
+}
