@@ -2,6 +2,17 @@
 namespace BracketsChecker;
 
 class Checker {
+	/**
+		Строка
+	*/
+	private $str;
+
+	/**
+		Количество скобок
+	*/
+
+	private $openingB;
+	private $closingB;
 
 	/**
 		Шаблон для проверки
@@ -9,25 +20,52 @@ class Checker {
 
 	private $pattern = "/[^\\n\\t\\r()]/";
 
+	public function __construct($str) {
+		$this->setParams($str);
+	}
+	
+	/**
+		Установить параметры
+		@params string
+		@result void
+	*/
+
+	public function setParams($str):void {
+		$this->str = $str;
+		$this->checkStr();
+		$this->openingB = substr_count($this->str, "(");
+		$this->closingB = substr_count($this->str, ")");
+	}
+
 	/**
 		Проверяет количество скобок
 		@param string
 		@result boolean
 	*/
 
-	public function check(string $str):bool {
-		if($this->checkParam($str)) {
-			$pattern1 = "/[(]+/";
-			$pattern2 = "/[)]+/";
-			preg_match($pattern1, $str, $matches1);
-			preg_match($pattern2, $str, $matches2);
 
-			if(strlen($matches1[0]) === strlen($matches2[0])) {
-				return true;
-			}
-			return false;
-		}
+	public function check() {
+		return $this->openingB === $this->closingB;
 	}
+
+
+	/**
+		Проверяет количество скобок и вернёт информацию
+		@param string
+		@result string
+
+	*/
+
+	public function checkWithInfo():string {
+		if(!$this->check()) {
+			$missingB = $this->openingB - $this->closingB > 0 ? $this->closingB." закрывающих" : $this->openingB." открывающих";
+			return "Отсуствует ".$missingB." скобок";
+		}
+
+		return "Количество скобок одинаково";
+	}
+
+
 
 	/**
 		Проверяет правильно ли задан строка
@@ -35,8 +73,8 @@ class Checker {
 		@result boolean
 	*/
 
-	private function checkParam(string $str):bool {
-		preg_match($this->pattern, $str, $matches);
+	private function checkStr():bool {
+		preg_match($this->pattern, $this->str, $matches);
 		if(count($matches) > 0) {
 			throw new \InvalidArgumentException("Строка может содержать только скобки", 1);
 		} 
